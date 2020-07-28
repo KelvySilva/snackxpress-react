@@ -2,10 +2,10 @@ import React, {useState, useEffect} from 'react';
 
 import { Link, useHistory } from "react-router-dom";
 
-import api from '../../services/api';
+import api from '../../../services/api';
 
-import Nav from '../Nav';
-import IRecipe from '../../models/IRecipe';
+import Nav from '../../Nav';
+import IRecipe from '../../../models/IRecipe';
 import { FiCalendar } from 'react-icons/fi';
 
 
@@ -13,6 +13,7 @@ import { FiCalendar } from 'react-icons/fi';
 const Recipes = () => {
 
     const [recipes, setRecipes] = useState<IRecipe[]>([]);
+    const [error, setError] = useState(Object);
 
     const history = useHistory();
 
@@ -20,10 +21,16 @@ const Recipes = () => {
         history.push('/recipe', {recipe_id : id})
     }
 
+    function handleCreateRecipe() {
+        history.push("/recipe/new");
+    }
+
     useEffect(() => {
         api.get<IRecipe[]>('/v1/protected/recipes')
         .then(res => {
             setRecipes(res.data)
+        }).catch(err => {            
+            console.log(err.response.data);  
         })
     }, []);
 
@@ -39,14 +46,8 @@ const Recipes = () => {
                     <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                         <h1 className="h2">Recipes</h1>
                         <div className="btn-toolbar mb-2 mb-md-0">
-                            <div className="btn-group mr-2">
-                                <button className="btn btn-sm btn-outline-secondary">Share</button>
-                                <button className="btn btn-sm btn-outline-secondary">Export</button>
-                            </div>
-                            <button className="btn btn-sm btn-outline-secondary dropdown-toggle">
-                                <FiCalendar />
-                                This week
-                            </button>                        
+                            
+                            <button onClick={handleCreateRecipe} className="btn btn-sm btn-outline-secondary btn-success text-white">Adicionar</button>                      
                         </div>                        
                     </div>                    
                     
@@ -77,6 +78,9 @@ const Recipes = () => {
                                             </div>
                                         ))}
                                     </div>
+                                    {(recipes.length == 0 ) && (
+                                        <h3>Não há itens cadastrados</h3>
+                                    )}
                                 </div>
                             </div>
                         </div>

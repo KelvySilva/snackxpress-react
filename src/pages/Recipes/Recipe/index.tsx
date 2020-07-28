@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react';
 
 import { useLocation, useHistory } from "react-router-dom";
 
-import api from '../../services/api';
-import IRecipe from '../../models/IRecipe';
+import api from '../../../services/api';
+import IRecipe from '../../../models/IRecipe';
 import { FiCalendar } from 'react-icons/fi';
-import Nav from '../Nav';
+import Nav from '../../Nav';
 
 interface Params {
     recipe_id: number

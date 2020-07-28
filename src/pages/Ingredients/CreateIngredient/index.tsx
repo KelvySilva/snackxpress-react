@@ -3,6 +3,7 @@ import { useHistory,useLocation } from "react-router-dom";
 import api from '../../../services/api';
 import Nav from '../../Nav';
 import IIngreditent from '../../../models/IIngredient';
+import Ingredients from '../IngredientList';
 
 interface Params {
     ingredient_id:number
@@ -38,11 +39,9 @@ const CreateIngredient = () => {
 
 
     function handleSubmit(event: FormEvent) {
-        event.preventDefault();
-    
+        event.preventDefault();   
         
-        const type = 'COMPOSITE';       
-    
+        const type = 'COMPOSITE';           
         
         if(ing != null && ing.stock != undefined) {
             
@@ -56,6 +55,9 @@ const CreateIngredient = () => {
                     'id':ing.stock.id,
                     'quantity':quantity
                 }
+            }).then(res => {
+                alert('Ingrediente Atualizado!');
+                history.push("/ingredients");
             });
         
         }else {
@@ -67,15 +69,14 @@ const CreateIngredient = () => {
                 'stock': {
                     'quantity':quantity
                 }
+            }).then(res => {
+                alert('Ingrediente Adiconado!');
+                history.push("/ingredients");
             });
         
         }
-    
         
-        alert('Ingrediente Adiconado!');
-    
-        history.push('/ingredients');
-      }
+    }
     
     
 

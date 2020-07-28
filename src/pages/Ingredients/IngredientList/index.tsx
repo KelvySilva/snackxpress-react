@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import api from '../../../services/api';
 import IIngreditent from '../../../models/IIngredient';
 import Nav from '../../Nav';
-import { Link,useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { FiDelete, FiEdit } from "react-icons/fi";
 import IProductFinal from '../../../models/IProductFinal';
 
@@ -12,7 +12,6 @@ import IProductFinal from '../../../models/IProductFinal';
 const Ingredients = () => {
 
     const [ingredients, setIngredients] = useState<IIngreditent[]>([]);
-    const [ingredient, setIngredient] = useState<IIngreditent>(Object);
 
     const history = useHistory();
 
@@ -37,19 +36,17 @@ const Ingredients = () => {
                 api.delete(`/v1/admin/ingredient/${id}`);
                 setIngredients(ingredients.filter(ingredient => ingredient.id !== id)); 
             } catch (error) {
-                alert('Erro ao deletar caso.');
+                alert('Erro ao deletar ingrediente.');
             }
         }
        
     }
 
     useEffect(() => {
-
-        api.get<IIngreditent[]>('/v1/protected/ingredients').then((res) => {
+        api.get<IIngreditent[]>('/v1/protected/ingredients').then(res => {
             setIngredients(res.data);
-        })
-
-    },[])
+        });
+    },[]);
 
     return (
         <div className="jumbotron p-0">

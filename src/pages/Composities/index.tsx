@@ -4,31 +4,15 @@ import React, { useState , useEffect} from 'react';
 import api from '../../services/api';
 
 import './style.css';
+import Composite from '../../models/Composite';
 
 
-interface Composities {
-    id: number;
-    quantity: number;
-    ingredient: Ingreditent;
-}
-interface Stock {
-    id: number;
-    quantity: number;
-}
-interface Ingreditent {
-    id: number;
-    name: string;
-    description: string,
-    cost: number,
-    type: string,
-    stock: Stock
-}
 const Composities = () => {
 
-    const [composites, setComposities] = useState<Composities[]>([]);
+    const [composites, setComposities] = useState<Composite[]>([]);
 
     useEffect(() => {
-        api.get<Composities[]>('/v1/protected/composities').then((res) => {
+        api.get<Composite[]>('/v1/protected/composities').then((res) => {
             console.log(res.data);
             
             setComposities(res.data);

@@ -4,15 +4,15 @@ import React, { useState , useEffect} from 'react';
 import api from '../../services/api';
 
 import './style.css';
-import Composite from '../../models/Composite';
+import IComposite from '../../models/IComposite';
 
 
 const Composities = () => {
 
-    const [composites, setComposities] = useState<Composite[]>([]);
+    const [composites, setComposities] = useState<IComposite[]>([]);
 
     useEffect(() => {
-        api.get<Composite[]>('/v1/protected/composities').then((res) => {
+        api.get<IComposite[]>('/v1/protected/composities').then((res) => {
             console.log(res.data);
             
             setComposities(res.data);

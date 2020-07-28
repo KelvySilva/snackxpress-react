@@ -23,7 +23,7 @@ const Routes = () => {
                 <Route path="/ingredient/new" exact component={CreateIngredient}/>
                 <Route path="/products" component={Products} />
                 <Route path="/recipes" component={Recipes} />
-                <Route path="/recipe" render={Recipe} />
+                <Route path="/recipe" component={Recipe} />
                 <Route path="/composities" component={Composities} />
                 <Route path="/composite" component={Composite} />
             </Switch>

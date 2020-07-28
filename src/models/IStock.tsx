@@ -1,6 +1,6 @@
-interface Stock {
+interface IStock {
     id: number;
     quantity: number;
 }
 
-export default Stock;
+export default IStock;

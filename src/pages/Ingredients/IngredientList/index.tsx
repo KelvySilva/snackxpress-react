@@ -1,15 +1,18 @@
 import React, {useState, useEffect} from 'react';
 
 import api from '../../../services/api';
-import Ingreditent from '../../../models/Ingredient';
+import IIngreditent from '../../../models/IIngredient';
 import Nav from '../../Nav';
 import { Link,useHistory } from 'react-router-dom';
+import { FiDelete, FiEdit } from "react-icons/fi";
+import IProductFinal from '../../../models/IProductFinal';
 
 
 
 const Ingredients = () => {
 
-    const [ingredients, setIngredients] = useState<Ingreditent[]>([]);
+    const [ingredients, setIngredients] = useState<IIngreditent[]>([]);
+    const [ingredient, setIngredient] = useState<IIngreditent>(Object);
 
     const history = useHistory();
 
@@ -17,9 +20,32 @@ const Ingredients = () => {
         history.push("/ingredient/new");
     }
 
+    function handleEditIngredient(id: number) {
+        history.push('/ingredient/new', {ingredient_id : id});
+    }
+
+    function handleDeleteIngredient(id:number) {
+
+        let deleteThis = false;
+        api.get<IProductFinal>(`/v1/protected/ingredient/${id}`).then(res => {
+            deleteThis = window.confirm(`Gostaria de excluir o item ${res.data.name}?`);
+
+        });        
+
+        if(deleteThis) {
+            try {
+                api.delete(`/v1/admin/ingredient/${id}`);
+                setIngredients(ingredients.filter(ingredient => ingredient.id !== id)); 
+            } catch (error) {
+                alert('Erro ao deletar caso.');
+            }
+        }
+       
+    }
+
     useEffect(() => {
 
-        api.get<Ingreditent[]>('/v1/protected/ingredients').then((res) => {
+        api.get<IIngreditent[]>('/v1/protected/ingredients').then((res) => {
             setIngredients(res.data);
         })
 
@@ -50,14 +76,25 @@ const Ingredients = () => {
                                 <div className="col-lg-12">
                                     <div className="row">
                                         {ingredients.map(ing => (
-                                            <div key={ing.id} className="col-lg-4 card">
-                                                <div className="card-header">
-                                                    Nome:   {ing.name}
+                                            <div key={ing.id} className="col-lg-4 ">
+                                                <div className="card-header border bg-light d-flex justify-content-between">
+                                                    {ing.name}
+                                                    <div className="actions">
+                                                        <button className="btn btn-danger py-0 px-1 mr-1" onClick={() => handleDeleteIngredient(ing.id)}>
+                                                            <FiDelete size={18} />
+                                                        </button>
+                                                        <button className="btn btn-primary py-0 px-1" onClick={() =>
+                                                        handleEditIngredient(ing.id)}>
+                                                            <FiEdit size={18}/>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                                <div className="card-body">
+                                                <div className="card-body p-1 border">
                                                     <ul>
                                                         <li>
-                                                            Custo: {ing.cost}
+                                                            Custo: {Intl.NumberFormat(
+                                                                'pt-BR', {style:'currency', currency:'BRL'}
+                                                            ).format(ing.cost)}
                                                         </li>
                                                         <li>
                                                             Estoque: {ing.stock.quantity}
